@@ -1,0 +1,16 @@
+tipos de usuarios:
+
+1 infantil <= 12        :
+2 adolescentes: 13 y 18 :
+3 acción: hombre 18 y 100: programmer,technician, executive, homemaker, retired, salesman
+4 ciencia ficción: >18  : administrator, doctor, marketing, student, none
+5 geek: > 16            : scientist, engineer, healthcare, other
+6 letters: > 15         : educator, artist, lawyer, librarian, retired, writer, educator,entertainment
+
+=SI.CONJUNTO(
+B1<=12;1;
+Y(B1>=13;B1<=18);2;
+Y(B1>=25;B1<=50;O(D1="programmer";D1="technician";D1="executive";D1="homemaker",D1="retired",D1="salesman"));3;
+Y(B1>=18;O(D1="administrator";D1="doctor";D1="marketing"));4
+Y(B1>=16;O(D1="scientist";D1="engineer";D1="healthcare"));5
+Y(B1>=15;O(D1="educator";D1="artist";D1="lawyer",D1="librarian",D1="retired",D1="writer",D1="educator",D1="entertainment"));6)

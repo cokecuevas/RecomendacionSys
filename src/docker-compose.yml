@@ -1,0 +1,37 @@
+version: '2'
+services:
+  recomendacion-api:
+    container_name: sistema-recomendacion
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    links:
+      - db-recomendacion
+    ports:
+      - "8090:5090"
+    volumes:
+      - .:/src
+  db-recomendacion:
+    image: mysql:latest
+    container_name: mysql-recomendacion
+    command: --default-authentication-plugin=mysql_native_password --secure-file-priv=''
+    restart: always
+    ports:
+      - "32020:3320"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db/schema:/docker-entrypoint-initdb.d/:ro
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    volumes:
+      - 'redis_data:/var/redis/data'
+volumes:
+  redis_data:

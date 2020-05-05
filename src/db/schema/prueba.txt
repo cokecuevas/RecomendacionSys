@@ -1,0 +1,1 @@
+3	24	M	technician	1@1.cl	$5$rounds=535000$1W086ra6NRWIIDmN$uSIOQNFjrOwy1DBdKwupXVZK1TGTtOCIgM9t086v3y7	3	{'Unknown': 0}
