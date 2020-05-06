@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { MDBMask, MDBView, MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import { demografico } from '../UserFunctions'
+import { demografico } from '../UserFunctions';
 import { BoxLoading } from 'react-loadingg';
+import Rating from './Rating'
+import axios from 'axios';
+
 class Movie extends Component {
 
     constructor(props) {
@@ -31,6 +34,8 @@ class Movie extends Component {
         
     }
 
+    
+        
     render() {
         var peliculas = this.state.movies;
         if (this.state.loading == false){
@@ -38,12 +43,13 @@ class Movie extends Component {
             peliculas.map( item => (
             <MDBCol md="3">
                 <MDBView>
-                <img
-                    src={item.Image}
+                <img src={item.Image}
                     className="img-fluid"
                     alt=""
                     style={{borderRadius:"15px",weight:"350px",height:"300px"}}
-                />
+                    onError={(e)=>{e.target.onerror = null; e.target.src="https://www.caminodeemaus.net/wp-content/uploads/2014/10/valores-caratula-no-disponible.jpg"}}
+                    />
+                <Rating rate={item.Ratio} max_rate ={peliculas[0].Ratio}></Rating>
                 <MDBMask className="flex-center" overlay="teal-slight">
                     <p className="white-text" style={{color:"white"}}>{item.Movie}</p>
                 </MDBMask>

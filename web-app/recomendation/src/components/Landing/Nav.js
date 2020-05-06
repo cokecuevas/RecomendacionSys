@@ -55,7 +55,7 @@ class Nav extends Component {
 `;
         return (
             <Nav>
-                        <a href={"/dashboard"} className="logo">
+                        <a href={"/"} className="logo">
                             <img src={playroomLogo} alt="Playroom Logo" />
                         </a>
                         <SignInButton onClick={this.onClick} right="true" >Sign In</SignInButton>        

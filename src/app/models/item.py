@@ -29,9 +29,7 @@ class Item(db.Model):
     Western = db.Column(db.Integer())
     Movie = db.Column(db.String())
     Image = db.Column(db.String())
-
-    def __repr__(self):
-        return 'Item< Id: {}, Name: {}>'.format(self.Id)
+    Ratio = str()
 
 class ItemSchema(Schema):
     Id = fields.Integer()
@@ -60,3 +58,4 @@ class ItemSchemaOnlyMovie(Schema):
     Id = fields.Integer()
     Movie = fields.Str()
     Image = fields.Str()
+    Ratio = fields.Str()

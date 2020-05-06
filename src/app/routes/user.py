@@ -93,13 +93,15 @@ def getProfile(user_id):
         return jsonify({"Message": "User doesn't have profile"}), 400
     # DEMOGRAFICO
     rated = Rated.query.filter(Rated.Id_user.in_((user_id))).all()
-    limit = 20
-    query = db.session.execute("SELECT Id_item FROM Type_item_ratio where User_type_id = " +
+    limit = 30
+    query = db.session.execute("SELECT Id_item,Ratio FROM Type_item_ratio where User_type_id = " +
                                str(user.User_type_id)+" order by Ratio desc limit "+str(limit))
     items_id = query.fetchall()
     items_demografico = []
     for x in items_id:
+        print(x)
         item = Item.query.filter_by(Id=x[0]).first()
+        item.Ratio = x[1]
         item = ItemSchemaOnlyMovie().dump(item)
         items_demografico.append(item)
     # COLABORATIVO
@@ -115,6 +117,7 @@ def getProfile(user_id):
     items_colaborativo = []
     for x in items_id[0:limit]:
         item = Item.query.filter_by(Id=x[0]).first()
+        item.Ratio = x[1]
         item = ItemSchemaOnlyMovie().dump(item)
         items_colaborativo.append(item)
 
