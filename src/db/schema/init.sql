@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   INSERT INTO User_type
   (Id, Description,Unknown,Action,Adventure,Animation,Children,Comedy,Crime,Documentary,Drama,Fantasy,Film_Noir,Horror,Musical,Mystery,Romance,SciFi,Thriller,War,Western)
   VALUES
-  (NULL, 'Infantil','0','0','0','100','100','0','0','0','0','0','0','0','0','0','0','0','0','0','0'),
+  (NULL, 'Infantil','0','0','50','100','100','90','0','90','0','0','0','0','0','0','0','0','0','0','0'),
   (NULL, 'Adolescentes','0','0','100','80','0','0','0','70','70','80','0','0','90','60','70','0','0','0','0'),
   (NULL, 'Accion','0','100','70','0','0','0','100','0','60','0','0','0','0','0','0','0','0','100','90'),
   (NULL, 'Ficcion','0','60','70','0','0','0','50','0','0','80','0','0','0','0','0','0','0','0','0'),
@@ -140,12 +140,12 @@ LOAD DATA INFILE '/docker-entrypoint-initdb.d/genre.txt' INTO table Genre;
 LOAD DATA INFILE '/docker-entrypoint-initdb.d/items.txt' INTO table Item;
 LOAD DATA INFILE '/docker-entrypoint-initdb.d/u1_base.txt' INTO table Rated;
 
-source /docker-entrypoint-initdb.d/insert_type_1
-source /docker-entrypoint-initdb.d/insert_type_2
-source /docker-entrypoint-initdb.d/insert_type_3
-source /docker-entrypoint-initdb.d/insert_type_4
-source /docker-entrypoint-initdb.d/insert_type_5
-source /docker-entrypoint-initdb.d/insert_type_6
+source /docker-entrypoint-initdb.d/insert_type_1.txt
+source /docker-entrypoint-initdb.d/insert_type_2.txt
+source /docker-entrypoint-initdb.d/insert_type_3.txt
+source /docker-entrypoint-initdb.d/insert_type_4.txt
+source /docker-entrypoint-initdb.d/insert_type_5.txt
+source /docker-entrypoint-initdb.d/insert_type_6.txt
 
 
 GRANT ALL ON *.* TO 'user_api'@'%' ;

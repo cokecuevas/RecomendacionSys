@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/12.12.0/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js build
+  /usr/local/Cellar/node/12.12.0/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js start
 
 PATH: 
   /Library/Frameworks/Python.framework/Versions/3.7/bin:/anaconda2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin://anaconda3/bin://anaconda3/condabin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/anaconda2/bin

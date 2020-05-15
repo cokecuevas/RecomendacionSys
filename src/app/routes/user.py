@@ -8,7 +8,6 @@ import uuid
 import datetime
 from flask import Flask, jsonify, request, json
 from flask_cors import CORS
-from ..helpers.decorators import authorize
 from ..helpers.utils import Utils
 from sqlalchemy import and_
 from datetime import date
@@ -68,6 +67,8 @@ def userRegister():
     user = User.query.filter_by(Email=email).first()
     if user:
         return jsonify({"Message": "Email is already registred"}), 400
+    user_type_id = calcularUserType(age, gender, occupation)
+    print(user_type_id)
     user = User(Id=None,
                 Age=age,
                 Gender=gender,
@@ -75,7 +76,7 @@ def userRegister():
                 Password=password,
                 Email=email,
                 Preferences=preferences,
-                User_type_id=1
+                User_type_id=user_type_id
                 )
     db.session.add(user)
     db.session.commit()
@@ -92,8 +93,9 @@ def getProfile(user_id):
     if not user:
         return jsonify({"Message": "User doesn't have profile"}), 400
     # DEMOGRAFICO
-    rated = Rated.query.filter(Rated.Id_user.in_((user_id))).all()
+    #rated = Rated.query.filter(Rated.Id_user.in_((user_id))).all()
     limit = 30
+    print(user.User_type_id)
     query = db.session.execute("SELECT Id_item,Ratio FROM Type_item_ratio where User_type_id = " +
                                str(user.User_type_id)+" order by Ratio desc limit "+str(limit))
     items_id = query.fetchall()
@@ -128,30 +130,30 @@ def getProfile(user_id):
     for i in range(0, len(items_demografico)):
         rate.append((items_demografico[i], limit-i))
     items_mix = sorted(rate, key=lambda tup: tup[1], reverse=True)
-    #tengo ids
+    # tengo ids
     ids_tuple = [(item[0]["Id"], item[1]) for item in items_mix]
-    ids_tuple.append((89,6))
     ids = [(item[0]["Id"]) for item in items_mix]
-    ids.append(89)
-    #los cuento
+    # los cuento
     c = Counter(ids)
-    #elimino duplicados
+    # elimino duplicados
     seen = set()
     ids = [(a, b) for a, b in ids_tuple if not (a in seen or seen.add(a))]
-    #sumo
+    # sumo
     for id in c:
-        for i in range(0,len(ids)):
-            if ids[i][0] == id and c[id]>1:
-                ids[i] = (id,ids[i][1]+c[id])
+        for i in range(0, len(ids)):
+            if ids[i][0] == id and c[id] > 1:
+                ids[i] = (id, ids[i][1]+c[id])
 
     ids = sorted(ids, key=lambda tup: tup[1], reverse=True)
     items_mixed = []
     for item in items_mix:
         for count in ids:
             if item[0]["Id"] == count[0]:
-                items_mixed.append((item[0],count[1]))
+                items_mixed.append((item[0], count[1]))
     items_mixed = sorted(items_mixed, key=lambda tup: tup[1], reverse=True)
     items_mixed = [item[0] for item in items_mixed]
+    if len(items_colaborativo) < 1:
+        items_colaborativo = famous(limit)
     user_response = {
         "Age": user.Age,
         "Gender": user.Gender,
@@ -162,6 +164,7 @@ def getProfile(user_id):
         "Demographic_preference": user.Preferences,
     }
     return jsonify({"Message": "Profile was found", 'Data': user_response})
+
 
 '''@app.route('/user/<user_id>/preferences/', methods=['GET'])
 def createPreferences(user_id):
@@ -180,6 +183,8 @@ def createPreferences(user_id):
     f.close()
     return jsonify({"Message":"Profile was found",'Data':"coucou"})
     '''
+
+
 
 
 def colaborativo(user_id, diff_ratio, sim_minima):
@@ -221,3 +226,45 @@ def colaborativo(user_id, diff_ratio, sim_minima):
     recomendacion = sorted(recomendacion, key=lambda tup: tup[1], reverse=True)
     return recomendacion, neighborns
     # return jsonify({"Message":"Profile was found",'Data':"coucou"})
+
+
+def famous(limit):
+    query = db.session.execute(
+        "select Id_item,avg(Rating) as 'promedio' from Rated group by Id_item order by promedio desc limit "+str(limit))
+    items_id = query.fetchall()
+    best_items = []
+    for x in items_id:
+        item = Item.query.filter_by(Id=x[0]).first()
+        item.Ratio = x[1]
+        item = ItemSchemaOnlyMovie().dump(item)
+        best_items.append(item)
+    return best_items
+
+
+def calcularUserType(age, gender, occupation):
+    age = int(age)
+    accion = ["programmer", "technician", "executive",
+            "homemaker", "retired", "salesman"]
+    ciencia = ["administrator", "doctor", "marketing", "student", "none"]
+    geek = ["scientist", "engineer", "healthcare", "other"]
+    letters = ["educator", "artist", "lawyer",
+            "librarian", "writer", "entertainment"]
+    if age < 12:
+        return 1
+    if age >= 13 and age <= 18:
+        return 2
+    if age >= 18 and age <= 100 and occupation in accion:
+        return 3
+    if age >= 18 and occupation in ciencia:
+        return 4
+    if age >= 16 and occupation in geek:
+        return 5
+    if age >= 15 and occupation in letters:
+        return 6
+
+
+@app.route('/user/ratios/', methods=['POST'])
+def createPreferences():
+    Utils.calculateRatio(1,{"Unknown":0,"Action":0,"Adventure":0,"Animation":100,"Children":100,"Comedy":0,"Crime":0,"Documentary":0,"Drama":0,"Fantasy":0,"Film_Noir":0,"Horror":0,"Musical":0,"Mystery":0,"Romance":0,"SciFi":0,"Thriller":0,"War":0,"Western":0})
+    return jsonify({"Message":"Profile was found",'Data':"coucou"})
+    

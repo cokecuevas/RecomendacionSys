@@ -116,7 +116,7 @@ class Register extends Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <input type="text"
+                                            <input TYPE="NUMBER" MIN="10" MAX="100" STEP="1" VALUE="0" SIZE="6"
                                             className="form-control"
                                             name="Age"
                                             placeholder="Enter Age"
@@ -126,24 +126,51 @@ class Register extends Component {
                                         />
                                         </div>
                                         <div className="col-sm-6">
-                                            <input type="text"
+                                            <select type="text"
                                             className="form-control"
                                             name="Gender"
                                             placeholder="Enter Gender"
                                             value={this.state.Gender}
                                             onChange={this.onChange}
-                                        />
+                                        >
+                                        <option value="M">M</option>
+                                        <option value="F">F</option>
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <input type="text"
+                                    <select type="text"
                                         className="form-control"
                                         name="Occupation"
                                         placeholder="Enter Occupation"
                                         value={this.state.Occupation}
                                         onChange={this.onChange}
-                                    />
+                                    >
+                                        <option value="programmer">programmer</option>
+                                        <option value="technician">technician</option>
+                                        <option value="executive">executive</option>
+                                        <option value="homemaker">homemaker</option>
+                                        <option value="retired">retired</option>
+                                        <option value="salesman">salesman</option>
+                                        <option value="administrator">administrator</option>
+                                        <option value="doctor">doctor</option>
+                                        <option value="marketing">marketing</option>
+                                        <option value="student">student</option>
+                                        <option value="none">none</option>
+                                        <option value="scientist">scientist</option>
+                                        <option value="engineer">engineer</option>
+                                        <option value="healthcare">healthcare</option>
+                                        <option value="other">other</option>
+                                        <option value="educator">educator</option>
+                                        <option value="artist">artist</option>
+                                        <option value="lawyer">lawyer</option>
+                                        <option value="librarian">librarian</option>
+                                        <option value="retired">retired</option>
+                                        <option value="writer">writer</option>
+                                        <option value="educator">educator</option>
+                                        <option value="entertainment">entertainment</option>
+                                </select>
                                 </div>
                                 <div className="form-group">
                                     <input type="email"

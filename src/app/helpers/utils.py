@@ -7,7 +7,7 @@ from  ..models.user import User, UserSchema
 import ast 
 
 class Utils:
-    def calculateRatio(vector_demografico):
+    def calculateRatio(user_type_id,vector_demografico):
         query_and = ""
         for w in sorted(vector_demografico, key=vector_demografico.get, reverse=True):
             if vector_demografico[w] > 0 and w != "Id":
@@ -16,10 +16,14 @@ class Utils:
         query = 'SELECT * FROM Item WHERE '+query_and
         query = db.session.execute(query)
         items = query.fetchall()
-        vector_demografico_values = [vector_demografico[w] for w in sorted(vector_demografico, key=vector_demografico.get, reverse=True)]
+        vector_demografico_values = [int(vector_demografico[w]) for w in vector_demografico]
+        f = open("insert_type_"+str(user_type_id)+".txt", "a")
         for item in items:
             rate = sum([x*y for x,y in zip(vector_demografico_values,item[1:20])])
-            rate = rate + Utils.getMovieRate(item[0])
+            rate = rate*0.8 + Utils.getMovieRate(item[0])*0.2
+            query = "INSERT INTO Type_item_ratio (Id, User_type_id,Id_item,Ratio) VALUES (NULL,"+str(user_type_id)+","+str(item.Id)+","+str(rate)+");"
+            f.write(str(query)+"\n")
+        f.close()
         return 0
     def jsonToObject(data,objectName):
         return json.loads(data, object_hook=lambda d: namedtuple(objectName, d.keys())(*d.values()))

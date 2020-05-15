@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export const register = newUser => {
+    console.log(newUser.Preferences)
     return axios
         .post('http://localhost:8090/user/register', {
             Age: newUser.Age,
